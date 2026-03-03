@@ -107,4 +107,4 @@ require (
 	gorm.io/driver/postgres v1.6.0 // indirect
 )
 
-replace github.com/your-moon/grape-shared => ../../grape-shared
+// replace github.com/your-moon/grape-shared => ../../grape-shared
