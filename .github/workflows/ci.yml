@@ -54,6 +54,6 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.GH_PAT_TOKEN }}
-          repository: grapellc/grape-backend
+          repository: your-moon/grape-backend
           event-type: update-auth-service
           client-payload: '{"sha": "${{ github.sha }}"}'
