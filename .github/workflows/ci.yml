@@ -46,6 +46,21 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/grape-auth-service:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/grape-auth-service:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/grape-auth-service:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  trigger-backend:
+    needs: build-image
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.GH_PAT_TOKEN }}
+          repository: grapellc/grape-backend
+          event-type: update-auth-service
+          client-payload: '{"sha": "${{ github.sha }}"}'
