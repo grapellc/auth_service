@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"go-micro.dev/v5"
@@ -155,6 +156,7 @@ func initOTPSender() otp.Sender {
 		smsSender = otp.NewConsoleSender()
 	} else {
 		smsSender = otp.NewMqttSender(messaging.MqttClient, viper.GetString("emqx.topic"))
+		startOTPSenderStatusListener()
 	}
 	if viper.GetString("smtp.host") != "" {
 		emailSender = otp.NewSMTPSender(
@@ -169,4 +171,17 @@ func initOTPSender() otp.Sender {
 		emailSender = otp.NewConsoleSender()
 	}
 	return otp.NewCompositeSender(smsSender, emailSender)
+}
+
+func startOTPSenderStatusListener() {
+	topic := "otp/sender/status"
+	err := messaging.SubscribeMqtt(topic, func(c mqtt.Client, m mqtt.Message) {
+		status := string(m.Payload())
+		logrus.Infof("[OTP Sender] Gateway status changed: %s", status)
+	})
+	if err != nil {
+		logrus.Warnf("Failed to subscribe to OTP sender status: %v", err)
+	} else {
+		logrus.Infof("Subscribed to OTP sender status on topic: %s", topic)
+	}
 }
