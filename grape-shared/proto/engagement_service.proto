@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package engagement.v1;
+
+option go_package = "github.com/your-moon/grape-shared/proto/engagementv1";
+
+// TargetType for likes/comments: product, job, market, review
+enum TargetType {
+  TARGET_TYPE_UNSPECIFIED = 0;
+  TARGET_TYPE_PRODUCT = 1;
+  TARGET_TYPE_JOB = 2;
+  TARGET_TYPE_MARKET = 3;
+  TARGET_TYPE_REVIEW = 4;
+}
+
+message ToggleLikeRequest {
+  TargetType target_type = 1;
+  uint32 target_id = 2;
+  uint32 user_id = 3;
+}
+message ToggleLikeResponse {
+  bool liked = 1;  // true if now liked, false if now unliked
+  int64 like_count = 2;
+}
+
+message GetLikeCountRequest {
+  TargetType target_type = 1;
+  uint32 target_id = 2;
+}
+message GetLikeCountResponse {
+  int64 count = 1;
+}
+
+message IsLikedRequest {
+  TargetType target_type = 1;
+  uint32 target_id = 2;
+  uint32 user_id = 3;
+}
+message IsLikedResponse {
+  bool liked = 1;
+}
+
+message GetLikeCountsBatchRequest {
+  TargetType target_type = 1;
+  repeated uint32 target_ids = 2;
+  optional uint32 user_id = 3;  // if set, response includes is_liked per id
+}
+message LikeCountItem {
+  uint32 target_id = 1;
+  int64 count = 2;
+  bool is_liked = 3;
+}
+message GetLikeCountsBatchResponse {
+  repeated LikeCountItem items = 1;
+}

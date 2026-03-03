@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package product.v1;
+
+option go_package = "github.com/your-moon/grape-shared/proto/productv1";
+
+message GetProductRequest {
+  uint32 id = 1;
+  optional uint32 current_user_id = 2;  // for is_liked
+}
+message GetProductResponse {
+  bytes product_json = 1;  // JSON-encoded product DTO
+  optional string error = 2;
+}
+
+message ListProductsRequest {
+  int32 limit = 1;
+  int32 page = 2;
+  optional uint32 current_user_id = 3;
+}
+message ListProductsResponse {
+  bytes items_json = 1;  // JSON array of products
+  int64 total = 2;
+  optional string error = 3;
+}
+
+message CreateProductRequest {
+  bytes payload_json = 1;  // ProductCreateDTO as JSON
+  uint32 user_id = 2;
+}
+message CreateProductResponse {
+  bytes product_json = 1;
+  optional string error = 2;
+}
+
+message UpdateProductRequest {
+  uint32 id = 1;
+  bytes payload_json = 2;
+}
+message UpdateProductResponse {
+  bytes product_json = 1;
+  optional string error = 2;
+}
+
+message DeleteProductRequest {
+  uint32 id = 1;
+}
+message DeleteProductResponse {
+  optional string error = 1;
+}
+
+message SearchProductsRequest {
+  string query = 1;
+  int32 limit = 2;
+  int32 page = 3;
+  repeated uint32 category_ids = 4;
+  optional uint32 current_user_id = 5;
+}
+message SearchProductsResponse {
+  bytes items_json = 1;
+  int64 total = 2;
+  optional string error = 3;
+}
+
+message RecordViewRequest {
+  uint32 product_id = 1;
+  optional uint32 user_id = 2;
+  optional string ip_address = 3;
+}
+message RecordViewResponse {}
+
+message ListFeedItemsRequest {
+  int32 limit = 1;
+  optional int64 before_timestamp_unix = 2;  // cursor: before this time
+}
+message FeedItemMsg {
+  string id = 1;
+  string module_type = 2;
+  uint32 source_id = 3;
+  string title = 4;
+  string summary = 5;
+  int64 created_at_unix = 6;
+  int64 like_count = 7;
+  int64 comment_count = 8;
+  string url_path = 9;
+}
+message ListFeedItemsResponse {
+  repeated FeedItemMsg items = 1;
+  optional int64 next_before_timestamp_unix = 2;
+  optional string error = 3;
+}

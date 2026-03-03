@@ -294,7 +294,7 @@ github.com/urfave/cli/v2
 # github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 ## explicit; go 1.15
 github.com/xrash/smetrics
-# github.com/your-moon/grape-shared v0.1.0 => ../../grape-shared
+# github.com/your-moon/grape-shared v0.1.0 => ./grape-shared
 ## explicit; go 1.24.0
 github.com/your-moon/grape-shared/common/constants
 github.com/your-moon/grape-shared/common/database
@@ -629,4 +629,4 @@ gorm.io/gorm/logger
 gorm.io/gorm/migrator
 gorm.io/gorm/schema
 gorm.io/gorm/utils
-# github.com/your-moon/grape-shared => ../../grape-shared
+# github.com/your-moon/grape-shared => ./grape-shared

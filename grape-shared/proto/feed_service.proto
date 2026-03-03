@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package feed.v1;
+
+option go_package = "github.com/your-moon/grape-shared/proto/feedv1";
+
+message GetFeedRequest {
+  int32 limit = 1;
+  optional int64 before_timestamp_unix = 2;  // cursor
+}
+message FeedItemMsg {
+  string id = 1;
+  string module_type = 2;
+  uint32 source_id = 3;
+  string title = 4;
+  string summary = 5;
+  int64 created_at_unix = 6;
+  int64 like_count = 7;
+  int64 comment_count = 8;
+  string url_path = 9;
+}
+message GetFeedResponse {
+  repeated FeedItemMsg items = 1;
+  optional int64 next_before_timestamp_unix = 2;
+  optional string error = 3;
+}

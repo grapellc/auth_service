@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package auth.v1;
+
+option go_package = "github.com/your-moon/grape-shared/proto/authv1";
+
+// User message for RPC responses (minimal fields for transport). id is UUID string after 002 migration.
+message UserMsg {
+  string id = 1;
+  string email = 2;
+  optional string phone_number = 3;
+  string role = 4;
+  bool is_phone_verified = 5;
+  bool is_email_verified = 6;
+}
+
+// AuthLog for LogAuth. user_id is UUID string when present.
+message AuthLogMsg {
+  optional string user_id = 1;
+  string identifier = 2;
+  string action = 3;
+  string status = 4;
+  string failure_reason = 5;
+  string ip_address = 6;
+  string user_agent = 7;
+}
+
+message LogAuthRequest {
+  AuthLogMsg log = 1;
+}
+message LogAuthResponse {}
+
+message IdentifierRequest {
+  string identifier = 1;
+}
+message EmptyResponse {}
+message ErrorResponse {
+  string code = 1;  // e.g. PASSWORD_NOT_SET, ERR_USER_NOT_FOUND
+  string message = 2;
+}
+
+message SignUpRequest {
+  string identifier = 1;
+  string code = 2;
+  string password = 3;
+}
+message TokenResponse {
+  UserMsg user = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+  optional ErrorResponse error = 4;
+}
+
+message VerifyRegistrationRequest {
+  string identifier = 1;
+  string code = 2;
+}
+
+message SetPasswordRequest {
+  string user_id = 1;
+  string password = 2;
+}
+
+message LoginPasswordRequest {
+  string identifier = 1;
+  string password = 2;
+}
+
+message LoginOTPRequest {
+  string phone = 1;
+  string code = 2;
+}
+
+message ResetPasswordRequest {
+  string identifier = 1;
+  string code = 2;
+  string new_password = 3;
+}
+
+message VerifyOTPRequest {
+  string identifier = 1;
+  string code = 2;
+  bool consume = 3;
+}
+
+message RequestPhoneChangeRequest {
+  string user_id = 1;
+  string new_phone = 2;
+}
+
+message ConfirmPhoneChangeRequest {
+  string user_id = 1;
+  string new_phone = 2;
+  string code = 3;
+}
+
+message RequestEmailChangeRequest {
+  string user_id = 1;
+  string new_email = 2;
+}
+
+message ConfirmEmailChangeRequest {
+  string user_id = 1;
+  string new_email = 2;
+  string code = 3;
+}
+
+message DeleteAccountRequest {
+  string user_id = 1;
+}
+
+message RefreshTokenRequest {
+  string token = 1;
+}
+message RefreshTokenResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  optional ErrorResponse error = 3;
+}
+
+message LogoutRequest {
+  string token = 1;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+message GetUserResponse {
+  UserMsg user = 1;
+  optional ErrorResponse error = 2;
+}

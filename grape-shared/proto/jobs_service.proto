@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package jobs.v1;
+
+option go_package = "github.com/your-moon/grape-shared/proto/jobsv1";
+
+message GetJobRequest {
+  uint32 id = 1;
+  optional uint32 current_user_id = 2;
+}
+message GetJobResponse {
+  bytes job_json = 1;
+  optional string error = 2;
+}
+
+message ListJobsRequest {
+  int32 limit = 1;
+  int32 page = 2;
+  optional uint32 current_user_id = 3;
+}
+message ListJobsResponse {
+  bytes items_json = 1;
+  int64 total = 2;
+  optional string error = 3;
+}
+
+message CreateJobRequest {
+  bytes payload_json = 1;
+  uint32 user_id = 2;
+}
+message CreateJobResponse {
+  bytes job_json = 1;
+  optional string error = 2;
+}
+
+message UpdateJobRequest {
+  uint32 id = 1;
+  bytes payload_json = 2;
+}
+message UpdateJobResponse {
+  bytes job_json = 1;
+  optional string error = 2;
+}
+
+message DeleteJobRequest {
+  uint32 id = 1;
+}
+message DeleteJobResponse {
+  optional string error = 1;
+}
+
+message SearchJobsRequest {
+  string query = 1;
+  int32 limit = 2;
+  int32 page = 3;
+  optional uint32 current_user_id = 4;
+}
+message SearchJobsResponse {
+  bytes items_json = 1;
+  int64 total = 2;
+  optional string error = 3;
+}
+
+message RecordViewRequest {
+  uint32 job_id = 1;
+  optional uint32 user_id = 2;
+  optional string ip_address = 3;
+}
+message RecordViewResponse {}
+
+message ListFeedItemsRequest {
+  int32 limit = 1;
+  optional int64 before_timestamp_unix = 2;
+}
+message FeedItemMsg {
+  string id = 1;
+  string module_type = 2;
+  uint32 source_id = 3;
+  string title = 4;
+  string summary = 5;
+  int64 created_at_unix = 6;
+  int64 like_count = 7;
+  int64 comment_count = 8;
+  string url_path = 9;
+}
+message ListFeedItemsResponse {
+  repeated FeedItemMsg items = 1;
+  optional int64 next_before_timestamp_unix = 2;
+  optional string error = 3;
+}
